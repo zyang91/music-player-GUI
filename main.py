@@ -15,6 +15,25 @@ current =0
 paused = False
 selected_folder_path = ""
 
+
+def update_progress_bar():
+    global current_position
+    while True:
+        if pygame.mixer.music.get_busy() and not paused:
+            current_position = pygame.mixer.music.get_pos() / 1000
+            prog_bar['value'] = int(current_position)
+
+            if current_position >= prog_bar['maximum']:
+                pause_song()
+                prog_bar['value'] = 0
+            
+            window.update()
+        time.sleep(1)
+
+
+
+
+
 def select_music_folder():
     global selected_folder_path
     selected_folder_path = filedialog.askdirectory()
@@ -66,6 +85,11 @@ def pause_song():
     global paused
     pygame.mixer.music.pause()
     paused = True
+
+def stop_song():
+    global paused
+    pygame.mixer.music.stop()
+    paused = False
 
 # establish the main window
 window = tk.Tk()
